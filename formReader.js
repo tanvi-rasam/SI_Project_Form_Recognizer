@@ -11,9 +11,9 @@ const swaggerUi= require('swagger-ui-express');
 const options={
 	swaggerDefinition:{
 	info:{
-	title:"SI Project: Form Recognizer ",
+	title:"SI Project: Form Recognizer",
 	version:"1.0.0",
-	description:""
+	description:"Azure Form Recognizer is a cognitive service that uses machine learning technology to identify and extract key-value pairs and table data from form documents. \r\n It then outputs structured data that includes the relationships in the original file. "
 },
 //host:'142.93.10.50:3000',
 host:'localhost:3000',
@@ -37,7 +37,7 @@ const { decode } = require('punycode');
 
 const endpoint = "https://formInfo.cognitiveservices.azure.com";
 const apiKey = "72dd7a2f8b3941a492b2194081ace7cd";
-//const trainingClient = new FormTrainingClient(endpoint, new AzureKeyCredential(apiKey));
+
 const client = new FormRecognizerClient(endpoint, new AzureKeyCredential(apiKey));
 
 //app.use(cors());
@@ -104,7 +104,7 @@ switch(ext) {
  * @swagger
  * /invoice:
  *    post:
- *     description: Return analyed invoice
+ *     description: This endpoint can analyze and extract information from sales invoices using its prebuilt invoice models. <br>The Invoice API enables customers to take invoices in a variety of formats and return structured data to automate the invoice processing. <br> It extracts the text, tables, and information such as customer, vendor, invoice ID, invoice due date, total, invoice amount due, tax amount, ship to, bill to, and more.
  *     produces:
  *        -application/json
  *     responses:
@@ -200,7 +200,7 @@ res.status(500).send('Invalid path or unsupported Image ');
  * @swagger
  * /businessCard:
  *    post:
- *     description: Return analyed Business Card
+ *     description: This endpoint can analyze and extract contact information from business cards using one of its prebuilt models. <br> It extracts personal contact info, company name, job title, and more.
  *     produces:
  *        -application/json
  *     responses:
@@ -293,7 +293,7 @@ res.status(500).send('Invalid path or unsupported Image ');
  * @swagger
  * /tableInfo:
  *    post:
- *     description: Return analyed Table
+ *     description: This endpoint can extract text, tables, selection marks, and structure information from documents using its Layout service. <br> It combines our powerful Optical Character Recognition (OCR) capabilities with document understanding deep learning models to extract text, tables, selection marks, and structure of documents.
  *     produces:
  *        -application/json
  *     responses:
@@ -387,7 +387,7 @@ res.status(500).send('Invalid path or unsupported Image ');
  * @swagger
  * /receipt:
  *    post:
- *     description: Return analyed receipt/bill
+ *     description: This endpoint can analyze receipts using one of its prebuilt models. <br> The Receipt API extracts key information from sales receipts in English, such as merchant name, transaction date, transaction total, line items, and more.
  *     produces:
  *        -application/json
  *     responses:
