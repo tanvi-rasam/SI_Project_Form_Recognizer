@@ -44,6 +44,7 @@ const client = new FormRecognizerClient(endpoint, new AzureKeyCredential(apiKey)
 let content_type=""
 let objPath=""
 let readStream=""
+global.flag=false;
 //image as url
 
 // research swagger
@@ -53,13 +54,15 @@ let readStream=""
 let headerMiddleware = function (req, res, next) {
 objPath = req.body.objPath; //"C:/Users/tv5ra/Desktop/invoice.jpeg";
 
-let ext = objPath.split(".")[1];
+ readStream = fs.createReadStream(objPath);
 
-if(objPath=="" || ext=="" || ext==undefined){
-    res.status(501).send("Invalid image path")
+ let ext = objPath.split(".")[1];
+
+if(objPath==""|| ext=="" || ext==undefined){
+    res.status(501).send("Invalid or no path provided")
 }
 else{
-    readStream = fs.createReadStream(objPath);
+
 
 switch(ext) {
   case 'jpeg':
@@ -78,6 +81,9 @@ switch(ext) {
     next()
 
 }
+
+
+
 
 }
         
@@ -104,6 +110,14 @@ switch(ext) {
  *     responses:
  *         200:
  *             description: Analyed invoice
+ *         400:
+ *             description: Analysis failed
+ *         401:
+ *             description: Fail to get the results
+ *         500:
+ *             description: Invalid path or unsupported Image
+ *         501:
+ *             description: Invalid or no path provided
  *     parameters:
  *          - name: invoiceObject
  *            description: Invoice object path
@@ -116,6 +130,8 @@ switch(ext) {
 
 app.post('/invoice',headerMiddleware, async (req,res)=>{
 
+
+    
 let post_url = endpoint + "/formrecognizer/v2.1-preview.2/prebuilt/invoice/analyze"
 
 const headers = {
@@ -128,9 +144,9 @@ const params = {
     "includeTextDetails": true,
     "locale": "en-US"
 }
-
+try {
 const result = await Axios.post(post_url,readStream,{params:params,headers:headers});
-
+try {
 const get_BC= result.headers['operation-location']
 
 n_tries = 10
@@ -146,12 +162,21 @@ if (result_final.data.status == "succeeded"){
      res.status(200).send(JSON.stringify(decoded,null,3))
     break;}
 if (result_final.data.status == "failed"){
-    res.status(200).send({msg:"Analysis failed"})
+    res.status(400).send({msg:"Analysis failed"})
     
     break;}
 
 setTimeout(function(){  }, 3000);
 n_try += 1   
+
+}
+} catch (error) {
+    res.status(401).send('Fail to get the analyzed results');
+    return;
+}
+} catch (error) {
+    
+res.status(500).send('Invalid path or unsupported Image ');
 
 }
 
@@ -181,6 +206,15 @@ n_try += 1
  *     responses:
  *         200:
  *             description: Analyed Business Card
+ *         400:
+ *             description: Analysis failed
+ *         401:
+ *             description: Fail to get the results
+ *         500:
+ *             description: Invalid path or unsupported Image
+ *         501:
+ *             description: Invalid or no path provided
+ * 
  *     parameters:
  *          - name: BusinessCardObjectPath
  *            description: Business card object path
@@ -206,9 +240,9 @@ const headers = {
 const params = {
     "includeTextDetails": true 
 }
-
+try {
 const result = await Axios.post(post_url,readStream,{params:params,headers:headers});
-
+try {
 const get_BC= result.headers['operation-location']
 
 n_tries = 10
@@ -223,7 +257,7 @@ if (result_final.data.status == "succeeded"){
      res.status(200).send(JSON.stringify(decoded,null,3))
     break;}
 if (result_final.data.status == "failed"){
-    res.status(200).send({msg:"Analysis failed"})
+    res.status(400).send({msg:"Analysis failed"})
     
     break;}
 
@@ -231,7 +265,15 @@ setTimeout(function(){  }, 3000);
 n_try += 1   
 
 }
+} catch (error) {
+    res.status(401).send('Fail to get the analyzed results');
+    return;
+}
+} catch (error) {
+    
+res.status(500).send('Invalid path or unsupported Image ');
 
+}
 
 })
 
@@ -257,6 +299,15 @@ n_try += 1
  *     responses:
  *         200:
  *             description: Analyed Table/Layout
+ *         400:
+ *             description: Analysis failed
+ *         401:
+ *             description: Fail to get the results
+ *         500:
+ *             description: Invalid path or unsupported Image
+ *         501:
+ *             description: Invalid or no path provided
+ * 
  *     parameters:
  *          - name: TableObjectPath
  *            description: Table/Layout object path
@@ -282,9 +333,10 @@ const headers = {
 const params = {
     "includeTextDetails": true 
 }
-
+try {
 const result = await Axios.post(post_url,readStream,{params:params,headers:headers});
 
+try {
 const get_table= result.headers['operation-location']
 
 n_tries = 10
@@ -299,7 +351,7 @@ if (result_final.data.status == "succeeded"){
      res.status(200).send(JSON.stringify(decoded,null,3))
     break;}
 if (result_final.data.status == "failed"){
-    res.status(200).send({msg:"Analysis failed"})
+    res.status(400).send({msg:"Analysis failed"})
     
     break;}
 
@@ -307,7 +359,15 @@ setTimeout(function(){  }, 3000);
 n_try += 1   
 
 }
+} catch (error) {
+    res.status(401).send('Fail to get the analyzed results');
+    return;
+}
+} catch (error) {
+    
+res.status(500).send('Invalid path or unsupported Image ');
 
+}
 
 })
 
@@ -334,12 +394,14 @@ n_try += 1
  *         200:
  *             description: Analyed Receipt
  *         400:
- *             description: Invalid Image, provide different one
+ *             description: Analysis failed
  *         401:
  *             description: Fail to get the results
  *         500:
- *             description: Analysis failed
- *          
+ *             description: Invalid path or unsupported Image
+ *         501:
+ *             description: Invalid or no path provided
+ *                   
  *     parameters:
  *          - name: ReceiptObjectPath
  *            description: Receipt object path
@@ -386,7 +448,7 @@ if (result_final.data.status == "succeeded"){
      return;
     }
 if (result_final.data.status == "failed"){
-    res.status(500).send({msg:"Analysis failed"})
+    res.status(400).send({msg:"Analysis failed"})
     return;
     }
 
@@ -400,7 +462,7 @@ n_try += 1
 }
 } catch (error) {
     
-res.status(400).send('Cannot analyze this image pls use a different one');
+res.status(500).send('Invalid path or unsupported Image ');
 
 }
 
