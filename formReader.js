@@ -11,7 +11,7 @@ const options={
 	info:{
 	title:"SI Project: Form Recognizer",
 	version:"1.0.0",
-	description:"Azure Form Recognizer is a cognitive service that uses machine learning technology to identify and extract key-value pairs and table data from form documents. \r\n It then outputs structured data that includes the relationships in the original file. \r\n Supported image extentions- jpeg,jpg,png,pdf "
+	description:"This Project consumes Azure Form Recognizer which is a cognitive service that uses machine learning technology to identify and extract key-value pairs and table data from form documents. \r\n It then outputs structured data that includes the relationships in the original file. \r\n  \r\n Supported image extentions- jpeg,jpg,png,pdf "
 },
 //host:'142.93.10.50:3000',
 host:'localhost:3000',
