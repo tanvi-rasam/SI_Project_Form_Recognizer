@@ -13,8 +13,8 @@ const options={
 	version:"1.0.0",
 	description:"This Project consumes Azure Form Recognizer which is a cognitive service that uses machine learning technology to identify and extract key-value pairs and table data from form documents. \r\n It then outputs structured data that includes the relationships in the original file. \r\n  \r\n Supported image extentions- jpeg,jpg,png,pdf "
 },
-host:'142.93.10.50:3000',
-//host:'localhost:3000',
+//host:'142.93.10.50:3000',
+host:'localhost:3000',
 basePath:'/'
 },
 apis:['./formReaderURL.js']
@@ -98,7 +98,7 @@ app.post('/invoice',[check('urlPath','Image URL is required').not().isEmpty().tr
     }
 
   data={
-    source:req.body.urlPath
+    "source":req.body.urlPath
 }
 let post_url = endpoint + "/formrecognizer/v2.1-preview.2/prebuilt/invoice/analyze"
 
@@ -296,7 +296,7 @@ const errors=validationResult(req);
     }
 
   data={
-    source:req.body.urlPath
+    "source":req.body.urlPath
 }
     
 let post_url = endpoint + "/formrecognizer/v2.0/Layout/analyze"
@@ -397,17 +397,17 @@ const errors=validationResult(req);
     }
 
   data={
-    source:req.body.urlPath
+    'source':req.body.urlPath
 }
     
 let post_url = endpoint + "/formrecognizer/v2.0/prebuilt/receipt/analyze"
 
 
-const headers = {
+// const headers = {
    
-    'Content-Type': "application/json" ,
-    'Ocp-Apim-Subscription-Key': apiKey,
-}
+//     'Content-Type': "application/json" ,
+//     'Ocp-Apim-Subscription-Key': apiKey,
+// }
 
 const params = {
     "includeTextDetails": true 
@@ -437,16 +437,17 @@ if (result_final.data.status == "failed"){
     return;
     }
 
-setTimeout(function(){  }, 3000);
+setTimeout(function(){  }, 1000);
 n_try += 1   
 
 }
 } catch (error) {
+    console.log(error)
     res.status(401).send('Fail to get the analyzed results');
     return;
 }
 } catch (error) {
-    
+     console.log(error)
 res.status(500).send('Invalid path or unsupported Image ');
 
 }
