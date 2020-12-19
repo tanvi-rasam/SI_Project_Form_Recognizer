@@ -90,7 +90,6 @@ const headers = {
  *              $ref: '#/definitions/InvoiceImage'
  */
 
-
 app.post('/invoice',[check('urlPath','Image URL is required').not().isEmpty().trim()], async (req,res)=>{
     const errors=validationResult(req);
     if(!errors.isEmpty()){
@@ -98,7 +97,7 @@ app.post('/invoice',[check('urlPath','Image URL is required').not().isEmpty().tr
     }
 
   data={
-    "source":req.body.urlPath
+    source:req.body.urlPath
 }
 let post_url = endpoint + "/formrecognizer/v2.1-preview.2/prebuilt/invoice/analyze"
 
@@ -146,9 +145,6 @@ res.status(500).send('Invalid path or unsupported Image ');
 
 
 })
-
-
-
 
 /**
  * @swagger
